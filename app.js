@@ -1,8 +1,9 @@
 const express = require("express");
 const mysql = require("mysql");
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 const path = require('path');
-dotenv.config({ path: './passwords.env'});
+dotenv.config({ path: './.env'});
 
 const app = express();
 
@@ -12,13 +13,18 @@ const database = mysql.createConnection({
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE
 });
-app.set('view engine','hbs');
+
 
 const publicDirectory = path.join(__dirname, './public' );
 app.use(express.static(publicDirectory));
 
-console.log(__dirname);
+//Parse URL-Encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded({extended: false}));
+//Parse JSON bodies (as sent by API clients)
+app.use(express.json());
+app.use(cookieParser());
 
+app.set('view engine','hbs');
 database.connect((error) => {
     if(error){
         console.log(error)
@@ -28,8 +34,8 @@ database.connect((error) => {
 });
 
 //Define Routes
-app.use('/',require('./routes/pages.js'))
-
+app.use('/',require('./routes/pages.js'));
+app.use('/auth',require('./routes/auth.js'));
 
 app.listen(3001,() => {
     console.log("Server started on Port 3001.")
