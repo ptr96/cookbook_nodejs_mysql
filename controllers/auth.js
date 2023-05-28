@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const cookieParser = require("cookie-parser");
 const { promisify } = require ('util');
 const { error } = require("console");
+// const mysql = require("mysql12");
 
 const database = mysql.createConnection({
     host: process.env.DATABASE_HOST,
@@ -162,3 +163,41 @@ exports.addingrecipe = async (req,res) => {
       });
   });
 };
+
+exports.checkRecipesInDB = async (req,res) => {
+  try {
+    const { recipe_name, ingredients,instructions } = req.body;
+
+    database.query('SELECT recipe_name, ingredients, instructions FROM recipes', (error, results, fields) => {
+      if (error) {
+        console.error('Error retrieving data from the database:', error);
+        return;
+      }
+      // Process the retrieved data
+      const recipes = results.map((row) => ({
+        recipe_name: row.recipe_name,
+        ingredients: row.ingredients,
+        instructions: row.instructions,
+      }));
+      console.log('Retrieved recipes:', recipes);
+      res.status(200).redirect("/recipespage",{recipes:recipes});
+    })
+
+  } catch (error) {
+    console.log(error);
+  }
+
+  // TODO: button doesnt response - - > need changes 
+};
+
+exports.upload = async (req,res) => {
+  
+  // TODO : ALL upload photo function
+
+};
+
+
+
+
+
+

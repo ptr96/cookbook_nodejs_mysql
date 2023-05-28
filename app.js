@@ -33,6 +33,8 @@ database.connect((error) => {
     }
 });
 
+
+
 //Define Routes
 app.use('/',require('./routes/pages.js'));
 app.use('/auth',require('./routes/auth.js'));

@@ -42,9 +42,17 @@
                     
                     
                     <button type="submit" class="btn btn-primary" >Add recipe</button>
-                
-                
                 </form>
+                    
+                <form action="/upload" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="myFile" class="form-label">Choose a file</label>
+                    <input type="file" class="form-control" id="myFile" name="myFile">
+                </div>
+                <button type="submit" class="btn btn-primary">Add photo</button>
+                </form>
+
+                {{!-- TODO : Change button language to eng. --}}
 
             </div>
         </div>
